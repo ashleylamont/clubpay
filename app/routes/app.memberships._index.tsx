@@ -1,4 +1,5 @@
-import { json, LoaderArgs, redirect, TypedResponse } from "@remix-run/node";
+import type { LoaderArgs, TypedResponse } from "@remix-run/node";
+import { json, redirect } from "@remix-run/node";
 import { prisma } from "~/db.server";
 import { getSession, isLoggedIn, USER_EMAIL_KEY } from "~/user.session.server";
 import { useLoaderData } from "@remix-run/react";

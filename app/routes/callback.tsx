@@ -1,5 +1,5 @@
 import type { LoaderArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
+import { json } from "@remix-run/node";
 import { validateCallbackToken } from "~/models/oidcClient";
 import { getSession } from "~/oidc.session.server";
 import { createUserSession } from "~/user.session.server";
