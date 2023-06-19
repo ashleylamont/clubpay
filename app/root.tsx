@@ -39,23 +39,22 @@ export default function App() {
     </head>
     <body className="h-full">
     <noscript>
-      <div className="w-full bg-amber-400 text-black">
-        <style>
-          {`
+      <style>
+        {`
           #noscript-notice:checked ~ * {
             display: none;
             }`}
-        </style>
-        <input id="noscript-notice" type="checkbox" className="hidden" />
-        <label htmlFor="noscript-notice" className="flex justify-center items-center">
-          You appear to have JavaScript disabled. Fair enough honestly.<br />
-          Most of this site should still work, but some things might be a bit wonky.<br />
-          If you want to see the cool stuff, please enable JavaScript, don't worry, we don't do
-          anything too crazy with it, mostly just link prefetching and some menu
-          dropdowns.<br /><br />
-          Anyways, if you really don't want to enable JavaScript, click this to hide this message.
-        </label>
-      </div>
+      </style>
+      <input id="noscript-notice" type="checkbox" className="hidden" />
+      <label htmlFor="noscript-notice"
+             className="w-full bg-amber-400 text-black flex justify-center items-center">
+        You appear to have JavaScript disabled. Fair enough honestly.<br />
+        Most of this site should still work, but some things might be a bit wonky.<br />
+        If you want to see the cool stuff, please enable JavaScript, don't worry, we don't do
+        anything too crazy with it, mostly just link prefetching and some menu
+        dropdowns.<br /><br />
+        Anyways, if you really don't want to enable JavaScript, click here to hide this message.
+      </label>
     </noscript>
     <Outlet />
     <ScrollRestoration />

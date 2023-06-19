@@ -70,7 +70,7 @@ export default function AppMenu({
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
-              aria-label="account of current user"
+              aria-label="menu button"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
@@ -99,11 +99,20 @@ export default function AppMenu({
               {appConfig.appMenu.pages.map((page) => (
                 <Link to={page.href} key={page.title} prefetch="intent">
                   <MenuItem onClick={handleCloseNavMenu}>
-                    <Typography textAlign="center">{page.title}</Typography>
+                  <Typography textAlign="center">{page.title}</Typography>
                   </MenuItem>
                 </Link>
               ))}
             </Menu>
+            <noscript>
+              {appConfig.appMenu.pages.map((page) => (
+                <Link to={page.href} key={page.title} prefetch="intent">
+                  <MenuItem>
+                    <Typography>{page.title}</Typography>
+                  </MenuItem>
+                </Link>
+              ))}
+            </noscript>
           </Box>
           <LocalActivityIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
@@ -125,13 +134,13 @@ export default function AppMenu({
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {appConfig.appMenu.pages.map((page) => (
-              <Button
-                key={page.title}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                {page.title}
-              </Button>
+              <Link to={page.href} key={page.title} prefetch="intent">
+                <Button
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  {page.title}
+                </Button>
+              </Link>
             ))}
           </Box>
 
@@ -159,9 +168,9 @@ export default function AppMenu({
               onClose={handleCloseUserMenu}
             >
               {appConfig.appMenu.settings.map((setting) => (
-                <MenuItem key={setting.title} onClick={handleCloseUserMenu}>
+                <Link key={setting.title} to={setting.href}>
                   <Typography textAlign="center">{setting.title}</Typography>
-                </MenuItem>
+                </Link>
               ))}
             </Menu>
           </Box>
