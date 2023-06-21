@@ -50,9 +50,9 @@ export async function isLoggedIn(request: Request): Promise<boolean> {
   return !!user;
 }
 
-export async function requireLoggedIn(
+export async function requireLoggedInDirect(
   request: Request
-): Promise<TypedResponse<User & {fallbackProfile: string}>> {
+): Promise<User & {fallbackProfile: string}> {
   const loggedIn = await isLoggedIn(request);
   if (!loggedIn) {
     throw redirect(`/doLogin?redirectTo=${encodeURIComponent(request.url)}`);
@@ -73,7 +73,13 @@ export async function requireLoggedIn(
     },
     backColor: "#00000000"
   }).toString("base64");
-  return json({...user, fallbackProfile});
+  return {...user, fallbackProfile};
+}
+
+export async function requireLoggedIn(
+  request: Request
+): Promise<TypedResponse<User & {fallbackProfile: string}>> {
+  return json(await requireLoggedInDirect(request));
 }
 
 export async function createUserSession(

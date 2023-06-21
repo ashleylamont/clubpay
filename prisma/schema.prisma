@@ -1,5 +1,5 @@
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -39,8 +39,16 @@ model Club {
   id              Int              @id @default(autoincrement()) // The unique ID of the club.
   name            String // The name of the club.
   description     String? // A brief description of the club (optional).
+  logoUrl         String? // The URL of the club's logo image (optional).
+  status          ClubStatus       @default(PRIVATE) // The status of the club.
   managers        Manager[] // A list of managers associated with the club.
   membershipTypes MembershipType[] // A list of membership types associated with the club.
+}
+
+enum ClubStatus {
+  PUBLIC
+  HIDDEN
+  PRIVATE
 }
 
 // The manager model represents a user entity that has been granted
