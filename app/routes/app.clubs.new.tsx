@@ -5,7 +5,7 @@ import { ValidatedForm, validationError } from "remix-validated-form";
 import { z } from "zod";
 import TextInput from "~/components/input/textInput";
 import SubmitButton from "~/components/input/submitButton";
-import type { DataFunctionArgs} from "@remix-run/server-runtime";
+import type { DataFunctionArgs } from "@remix-run/server-runtime";
 import { requireLoggedIn, requireLoggedInDirect } from "~/user.session.server";
 import { prisma } from "~/db.server";
 import { redirect } from "@remix-run/node";
@@ -25,9 +25,9 @@ const validator = withZod(
   })
 );
 
-export async function action ({
+export async function action({
                                request
-                             }: DataFunctionArgs){
+                             }: DataFunctionArgs) {
   const user = await requireLoggedInDirect(request);
   const result = await validator.validate(
     await request.formData()
@@ -55,7 +55,7 @@ export async function action ({
       clubId: club.id,
       manageClub: true,
       createMembers: true,
-      manageMembers: true,
+      manageMembers: true
     }
   });
 
@@ -69,15 +69,26 @@ export function loader({ request }: DataFunctionArgs) {
 export default function NewClub() {
   return (
     <Box sx={{ flexGrow: 1, padding: "10px" }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
+      <Grid container spacing={2} alignItems="center" justifyContent="center">
+        <Grid item xs={12} sm={8} md={6} xl={4}>
           <Paper sx={{ padding: "15px" }}>
             <Typography variant="h4">New Club</Typography>
             <ValidatedForm validator={validator} method="post">
-              <TextInput name="clubName" label="Club Name" />
-              <TextInput name="description" label="Description" />
-              <TextInput name="imageUrl" label="Club Logo URL" />
-              <SubmitButton />
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <TextInput fullWidth name="clubName" label="Club Name" />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextInput fullWidth multiline minRows={4} name="description"
+                             label="Description" />
+                </Grid>
+                <Grid item xs={12}>
+                  <TextInput fullWidth name="imageUrl" label="Club Logo URL" />
+                </Grid>
+                <Grid item xs={12}>
+                  <SubmitButton variant="contained" />
+                </Grid>
+              </Grid>
             </ValidatedForm>
           </Paper>
         </Grid>
