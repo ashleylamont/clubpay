@@ -2,8 +2,11 @@ import { useMatches } from "@remix-run/react";
 import { useMemo } from "react";
 
 import type { User } from "~/models/user.server";
+import type { TypedResponse } from "@remix-run/node";
 
 const DEFAULT_REDIRECT = "/";
+
+export type GetLoaderDataType<T  extends (...args: never[])=>Promise<TypedResponse<any>>> = T  extends (...args: never[])=>Promise<TypedResponse<infer U >> ? U: never;
 
 /**
  * This should be used any time the redirect path is user-provided

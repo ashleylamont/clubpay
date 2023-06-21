@@ -4,6 +4,7 @@ import { prisma } from "~/db.server";
 import { getSession, isLoggedIn, USER_EMAIL_KEY } from "~/user.session.server";
 import { useLoaderData } from "@remix-run/react";
 import { List, ListItem, ListItemText } from "@mui/material";
+import { GetLoaderDataType } from "~/utils";
 
 export async function loader({ request }: LoaderArgs) {
   if (!await isLoggedIn(request)) {
@@ -28,8 +29,6 @@ export async function loader({ request }: LoaderArgs) {
   })
   return json(user);
 }
-
-type GetLoaderDataType<T  extends (...args: never[])=>Promise<TypedResponse<any>>> = T  extends (...args: never[])=>Promise<TypedResponse<infer U >> ? U: never;
 
 export default function Memberships() {
   const data: GetLoaderDataType<typeof loader> = useLoaderData();
