@@ -2,9 +2,8 @@
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
 [![Join Discord](https://img.shields.io/discord/476382037620555776?label=discord)](https://cssa.club/discord)
-[![remix](https://img.shields.io/badge/remix-v1.15.0-blue)](https://remix.run/)
-[![MUI](https://img.shields.io/badge/MUI-v5.13.0-blue)](https://mui.com/)
-[![Prisma](https://img.shields.io/badge/prisma-v4.11.0-blue)](https://www.prisma.io/)
+[![remix](https://img.shields.io/badge/remix-v2.0.0-blue)](https://remix.run/)
+[![Prisma](https://img.shields.io/badge/prisma-v5.3.1-blue)](https://www.prisma.io/)
 
 ⚠️⚠️⚠️ **ClubPay is still in the early stages of development and not ready for use. If you're interested in getting involved in the development, join us on our [Discord](https://cssa.club/discord).** ⚠️⚠️⚠️
 
