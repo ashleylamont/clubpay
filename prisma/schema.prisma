@@ -55,6 +55,7 @@ model User {
   avatarUrl       String?
   superuser       Boolean              @default(false)
   authentications UserAuthentication[]
+  permissions     UserPermissions?
 }
 
 // Represents a login method for a given user
@@ -70,4 +71,19 @@ model UserAuthentication {
   providerUserId String
 
   @@id([providerUserId, provider])
+}
+
+// Repesents permissions for a given user, if not present, user has no special permissions (superuser implicitly has all permissions)
+model UserPermissions {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  userId String @id @unique
+  user   User   @relation(fields: [userId], references: [id])
+
+  // Permissions flags
+  manageMembers     Boolean @default(false)
+  manageMemberships Boolean @default(false)
+  manageEvents      Boolean @default(false)
+  manageClub        Boolean @default(false)
 }
