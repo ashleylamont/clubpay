@@ -1,6 +1,4 @@
 import * as z from "zod";
-import type { CompleteUser } from "./index";
-import { RelatedUserModel } from "./index";
 
 export const UserAuthenticationModel = z.object({
   createdAt: z.date(),
@@ -12,7 +10,8 @@ export const UserAuthenticationModel = z.object({
 
 export interface CompleteUserAuthentication
   extends z.infer<typeof UserAuthenticationModel> {
-  user: CompleteUser;
+  user: CompleteUse;
+  r;
 }
 
 /**
@@ -23,6 +22,6 @@ export interface CompleteUserAuthentication
 export const RelatedUserAuthenticationModel: z.ZodSchema<CompleteUserAuthentication> =
   z.lazy(() =>
     UserAuthenticationModel.extend({
-      user: RelatedUserModel,
+      user: RelatedUseModel,
     }),
   );

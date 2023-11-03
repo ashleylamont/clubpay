@@ -1,10 +1,14 @@
-import type { User } from ".prisma/client";
-import { getSession } from "~/services/session.server";
+import type { User, UserPermissions } from ".prisma/client";
+import { getSession } from "~/services/user.session.server";
 import { getClient, redirectUrl } from "~/services/auth/auth-config.server";
 import { generators } from "openid-client";
 import type { Session } from "@remix-run/node";
 
-export async function currentUser(request: Request): Promise<null | User> {
+export interface UserData
+  extends Omit<User, "permissions" | "createdAt" | "updatedAt">,
+    Omit<UserPermissions, "userId" | "createdAt" | "updatedAt"> {}
+
+export async function currentUser(request: Request): Promise<null | UserData> {
   const session = await getSession(request.headers.get("Cookie"));
   if (!session) {
     return null;

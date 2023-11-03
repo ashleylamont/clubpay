@@ -1,12 +1,20 @@
 import { createCookieSessionStorage } from "@remix-run/node";
 import { config } from "dotenv";
 import { assertExists } from "~/utils";
+import type { BaseClient } from "openid-client";
 
 config();
 
-export let sessionStorage = createCookieSessionStorage({
+export interface AuthSessionData {
+  codeVerifier: string;
+  providerUserId: string;
+  provider: string;
+  userinfo: Awaited<ReturnType<BaseClient["userinfo"]>>;
+}
+
+export let sessionStorage = createCookieSessionStorage<AuthSessionData>({
   cookie: {
-    name: "_session", // use any name you want here
+    name: "_authSession", // use any name you want here
     sameSite: "lax", // this helps with CSRF
     path: "/", // remember to add this so the cookie will work in all routes
     httpOnly: true, // for security reasons, make this cookie http only

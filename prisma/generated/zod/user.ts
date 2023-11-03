@@ -1,7 +1,13 @@
 import * as z from "zod";
 import { Pronouns } from "@prisma/client";
-import type { CompleteUserAuthentication } from "./index";
-import { RelatedUserAuthenticationModel } from "./index";
+import type {
+  CompleteUserAuthentication,
+  CompleteUserPermissions,
+} from "./index";
+import {
+  RelatedUserAuthenticationModel,
+  RelatedUserPermissionsModel,
+} from "./index";
 
 export const UserModel = z.object({
   id: z.string(),
@@ -19,6 +25,7 @@ export const UserModel = z.object({
 
 export interface CompleteUser extends z.infer<typeof UserModel> {
   authentications: CompleteUserAuthentication[];
+  permissions?: CompleteUserPermissions | null;
 }
 
 /**
@@ -29,5 +36,6 @@ export interface CompleteUser extends z.infer<typeof UserModel> {
 export const RelatedUserModel: z.ZodSchema<CompleteUser> = z.lazy(() =>
   UserModel.extend({
     authentications: RelatedUserAuthenticationModel.array(),
+    permissions: RelatedUserPermissionsModel.nullish(),
   }),
 );

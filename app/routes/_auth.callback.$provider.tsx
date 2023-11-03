@@ -1,10 +1,12 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
-import authenticationConfig from "../../authentication.config";
 import { redirect } from "@remix-run/node";
+import authenticationConfig from "../../authentication.config";
 import { getClient, redirectUrl } from "~/services/auth/auth-config.server";
-import { commitSession, getSession } from "~/services/session.server";
+import * as UserSession from "~/services/user.session.server";
+import * as AuthSession from "~/services/auth.session.server";
 import { prisma } from "~/services/db.server";
 import { Link } from "@remix-run/react";
+import type { UserData } from "~/services/auth/auth.server";
 
 export async function loader({ params, request }: LoaderFunctionArgs) {
   const providerName = params.provider;
@@ -17,16 +19,18 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
     return redirect("/login");
   }
 
-  const session = await getSession(request.headers.get("Cookie"));
+  const authSession = await AuthSession.getSession(
+    request.headers.get("Cookie"),
+  );
   const providerClient = await getClient(providerName);
   const clientParams = providerClient.callbackParams(request.url);
   const tokenSet = await providerClient.callback(
     // providerClient.issuer.metadata.token_endpoint,
     redirectUrl(providerName),
     clientParams,
-    { code_verifier: session.get("codeVerifier") },
+    { code_verifier: authSession.get("codeVerifier") },
   );
-  session.unset("codeVerifier");
+  authSession.unset("codeVerifier");
   const userinfo = await providerClient.userinfo(tokenSet?.access_token ?? "");
   const providerUserId = userinfo.sub;
   // Check if user has previously authenticated with this provider
@@ -39,26 +43,49 @@ export async function loader({ params, request }: LoaderFunctionArgs) {
         },
       },
       include: {
-        user: true,
+        user: {
+          include: {
+            permissions: true,
+          },
+        },
       },
     },
   );
   if (!existingUserAuthentication) {
     // User has not previously authenticated with this provider, so we'll need to create a new user
-    session.set("providerUserId", providerUserId);
-    session.set("provider", providerName);
-    session.set("userinfo", userinfo);
+    authSession.set("providerUserId", providerUserId);
+    authSession.set("provider", providerName);
+    authSession.set("userinfo", userinfo);
     return redirect("/register", {
       headers: {
-        "Set-Cookie": await commitSession(session),
+        "Set-Cookie": await AuthSession.commitSession(authSession),
       },
     });
   } else {
+    const userSession = await UserSession.getSession(
+      request.headers.get("Cookie"),
+    );
     // User has previously authenticated with this provider, so we can log them in
-    session.set("user", existingUserAuthentication.user);
+    const user: UserData = {
+      ...existingUserAuthentication.user,
+      manageClub:
+        existingUserAuthentication.user.superuser ||
+        (existingUserAuthentication.user.permissions?.manageClub ?? false),
+      manageMemberships:
+        existingUserAuthentication.user.superuser ||
+        (existingUserAuthentication.user.permissions?.manageMemberships ??
+          false),
+      manageMembers:
+        existingUserAuthentication.user.superuser ||
+        (existingUserAuthentication.user.permissions?.manageMembers ?? false),
+      manageEvents:
+        existingUserAuthentication.user.superuser ||
+        (existingUserAuthentication.user.permissions?.manageEvents ?? false),
+    };
+    userSession.set("user", user);
     return redirect("/", {
       headers: {
-        "Set-Cookie": await commitSession(session),
+        "Set-Cookie": await UserSession.commitSession(userSession),
       },
     });
   }

@@ -1,11 +1,13 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { commitSession, getSession } from "~/services/session.server";
+import * as UserSession from "~/services/user.session.server";
+import * as AuthSession from "~/services/auth.session.server";
 import { useLoaderData } from "@remix-run/react";
 import { Form } from "~/components/forms/form";
 import { z } from "zod";
 import SelectComponent from "~/components/forms/selectComponent";
 import { prisma } from "~/services/db.server";
+import type { UserData } from "~/services/auth/auth.server";
 
 const UserModel = z.object({
   firstName: z.string().min(1),
@@ -22,10 +24,15 @@ const UserModel = z.object({
 });
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const session = await getSession(request.headers.get("Cookie"));
-  const userinfo = session.get("userinfo");
+  const authSession = await AuthSession.getSession(
+    request.headers.get("Cookie"),
+  );
+  const userinfo = authSession.get("userinfo");
   if (!userinfo) {
-    return redirect(session.has("user") ? "/" : "/login");
+    const userSession = await UserSession.getSession(
+      request.headers.get("Cookie"),
+    );
+    return redirect(userSession.has("user") ? "/" : "/login");
   }
   const willBeSuperuser = (await prisma.user.count()) === 0;
   return json({ userinfo, willBeSuperuser });
@@ -33,19 +40,24 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
 export async function action({ request }: LoaderFunctionArgs) {
   const data = await request.formData();
-  const session = await getSession(request.headers.get("Cookie"));
-  const providerUserId = session.get("providerUserId");
-  const provider = session.get("provider");
-  const userData = UserModel.parse(Object.fromEntries(data.entries()));
+  const authSession = await AuthSession.getSession(
+    request.headers.get("Cookie"),
+  );
+  const providerUserId = authSession.get("providerUserId");
+  const provider = authSession.get("provider");
+  if (!providerUserId || !provider) {
+    return redirect("/login");
+  }
+  const oauthUserData = UserModel.parse(Object.fromEntries(data.entries()));
   const willBeSuperuser = (await prisma.user.count()) === 0;
   const user = await prisma.user.create({
     data: {
-      firstName: userData.firstName,
-      lastName: userData.lastName,
-      preferredName: userData.preferredName,
-      email: userData.email,
-      pronouns: [userData.pronouns],
-      otherPronouns: userData.otherPronouns,
+      firstName: oauthUserData.firstName,
+      lastName: oauthUserData.lastName,
+      preferredName: oauthUserData.preferredName,
+      email: oauthUserData.email,
+      pronouns: [oauthUserData.pronouns],
+      otherPronouns: oauthUserData.otherPronouns,
       superuser: willBeSuperuser,
       authentications: {
         create: {
@@ -55,14 +67,25 @@ export async function action({ request }: LoaderFunctionArgs) {
       },
     },
   });
-  session.set("user", user);
-  session.unset("providerUserId");
-  session.unset("provider");
-  session.unset("userinfo");
+  const userSession = await UserSession.getSession(
+    request.headers.get("Cookie"),
+  );
+  const userData: UserData = {
+    ...user,
+    manageClub: willBeSuperuser,
+    manageMemberships: willBeSuperuser,
+    manageMembers: willBeSuperuser,
+    manageEvents: willBeSuperuser,
+  };
+  userSession.set("user", userData);
+  authSession.unset("providerUserId");
+  authSession.unset("provider");
+  authSession.unset("userinfo");
+  const headers = new Headers();
+  headers.append("Set-Cookie", await UserSession.commitSession(userSession));
+  headers.append("Set-Cookie", await AuthSession.commitSession(authSession));
   return redirect("/", {
-    headers: {
-      "Set-Cookie": await commitSession(session),
-    },
+    headers,
   });
 }
 

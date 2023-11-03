@@ -1,6 +1,7 @@
-<svg xmlns:xlink="http://www.w3.org/1999/xlink" style="max-width: 428.025px; background-color: white;" aria-roledescription="er"
+<svg
+  style="max-width: 687.331px; background-color: white;" aria-roledescription="er"
   id="my-svg" role="graphics-document document"
-  viewBox="0 0 428.0245361328125 518" width="100%" xmlns="http://www.w3.org/2000/svg">
+  viewBox="0 0 687.3312377929688 562" width="100%" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <marker id="MD_PARENT_START" markerHeight="240" markerWidth="190" orient="auto" refX="0"
       refY="7">
@@ -64,7 +65,7 @@
   </defs>
   <g/>
   <g id="entity-ProviderType-dafe6976-97f2-565c-9bcf-a9c639f33df4"
-    transform="translate(43.74943161010742,119 )">
+    transform="translate(129.9048957824707,119 )">
     <rect class="er entityBox" height="68" width="100" x="0" y="0"/>
     <rect class="er attributeBoxOdd" height="22" width="50" x="0" y="24"/>
     <rect class="er attributeBoxOdd" height="22" width="50" x="50" y="24"/>
@@ -92,7 +93,7 @@
       y="0">OAUTH2
     </text>
   </g>
-  <g id="entity-Pronouns-e56d72c9-e519-5ea0-bda9-5ec2816bf931" transform="translate(20,386 )">
+  <g id="entity-Pronouns-e56d72c9-e519-5ea0-bda9-5ec2816bf931" transform="translate(20,408 )">
     <rect class="er entityBox" height="112" width="132.56903076171875" x="0" y="0"/>
     <rect class="er attributeBoxOdd" height="22" width="66.28451538085938" x="0" y="24"/>
     <rect class="er attributeBoxOdd" height="22" width="66.28451538085938" x="66.28451538085938"
@@ -148,7 +149,7 @@
     </text>
   </g>
   <g id="entity-User-818c511a-4a32-5484-ba70-875d765a9175"
-    transform="translate(243.74943161010742,20 )">
+    transform="translate(329.9048957824707,20 )">
     <rect class="er entityBox" height="266" width="158.16488647460938" x="0" y="0"/>
     <rect class="er attributeBoxOdd" height="22" width="54.095550537109375" x="0" y="24"/>
     <rect class="er attributeBoxOdd" height="22" width="80.0537109375" x="54.095550537109375"
@@ -347,7 +348,7 @@
       y="0"/>
   </g>
   <g id="entity-UserAuthentication-bd197d83-1cd4-5e1d-8243-7cb1c705c199"
-    transform="translate(252.56903076171875,386 )">
+    transform="translate(252.56903076171875,408 )">
     <rect class="er entityBox" height="112" width="155.4555206298828" x="0" y="0"/>
     <rect class="er attributeBoxOdd" height="22" width="54.095550537109375" x="0" y="24"/>
     <rect class="er attributeBoxOdd" height="22" width="77.34434509277344" x="54.095550537109375"
@@ -425,24 +426,136 @@
       y="0">🗝️
     </text>
   </g>
+  <g id="entity-UserPermissions-11eadeed-34e2-57e9-b889-d11b5d4e49d3"
+    transform="translate(508.02455139160156,386 )">
+    <rect class="er entityBox" height="156" width="159.30667114257812" x="0" y="0"/>
+    <rect class="er attributeBoxOdd" height="22" width="54.095550537109375" x="0" y="24"/>
+    <rect class="er attributeBoxOdd" height="22" width="105.21112060546875" x="54.095550537109375"
+      y="24"/>
+    <rect class="er attributeBoxEven" height="22" width="54.095550537109375" x="0" y="46"/>
+    <rect class="er attributeBoxEven" height="22" width="105.21112060546875" x="54.095550537109375"
+      y="46"/>
+    <rect class="er attributeBoxOdd" height="22" width="54.095550537109375" x="0" y="68"/>
+    <rect class="er attributeBoxOdd" height="22" width="105.21112060546875" x="54.095550537109375"
+      y="68"/>
+    <rect class="er attributeBoxEven" height="22" width="54.095550537109375" x="0" y="90"/>
+    <rect class="er attributeBoxEven" height="22" width="105.21112060546875" x="54.095550537109375"
+      y="90"/>
+    <rect class="er attributeBoxOdd" height="22" width="54.095550537109375" x="0" y="112"/>
+    <rect class="er attributeBoxOdd" height="22" width="105.21112060546875" x="54.095550537109375"
+      y="112"/>
+    <rect class="er attributeBoxEven" height="22" width="54.095550537109375" x="0" y="134"/>
+    <rect class="er attributeBoxEven" height="22" width="105.21112060546875" x="54.095550537109375"
+      y="134"/>
+    <text style="dominant-baseline: middle; text-anchor: middle; font-size: 12px;"
+      class="er entityLabel" id="text-entity-UserPermissions-11eadeed-34e2-57e9-b889-d11b5d4e49d3"
+      transform="translate(79.65333557128906,12)"
+      x="0" y="0">
+      UserPermissions
+    </text>
+    <text style="dominant-baseline: middle; font-size: 10.2px;" class="er entityLabel"
+      id="text-entity-UserPermissions-11eadeed-34e2-57e9-b889-d11b5d4e49d3-attr-1-type"
+      transform="translate(5,35)" x="0"
+      y="0">DateTime
+    </text>
+    <text style="dominant-baseline: middle; font-size: 10.2px;"
+      class="er entityLabel"
+      id="text-entity-UserPermissions-11eadeed-34e2-57e9-b889-d11b5d4e49d3-attr-1-name"
+      transform="translate(59.095550537109375,35)"
+      x="0"
+      y="0">createdAt
+    </text>
+    <text style="dominant-baseline: middle; font-size: 10.2px;" class="er entityLabel"
+      id="text-entity-UserPermissions-11eadeed-34e2-57e9-b889-d11b5d4e49d3-attr-2-type"
+      transform="translate(5,57)" x="0"
+      y="0">DateTime
+    </text>
+    <text style="dominant-baseline: middle; font-size: 10.2px;"
+      class="er entityLabel"
+      id="text-entity-UserPermissions-11eadeed-34e2-57e9-b889-d11b5d4e49d3-attr-2-name"
+      transform="translate(59.095550537109375,57)"
+      x="0"
+      y="0">updatedAt
+    </text>
+    <text style="dominant-baseline: middle; font-size: 10.2px;" class="er entityLabel"
+      id="text-entity-UserPermissions-11eadeed-34e2-57e9-b889-d11b5d4e49d3-attr-3-type"
+      transform="translate(5,79)" x="0"
+      y="0">Boolean
+    </text>
+    <text style="dominant-baseline: middle; font-size: 10.2px;"
+      class="er entityLabel"
+      id="text-entity-UserPermissions-11eadeed-34e2-57e9-b889-d11b5d4e49d3-attr-3-name"
+      transform="translate(59.095550537109375,79)"
+      x="0"
+      y="0">manageMembers
+    </text>
+    <text style="dominant-baseline: middle; font-size: 10.2px;" class="er entityLabel"
+      id="text-entity-UserPermissions-11eadeed-34e2-57e9-b889-d11b5d4e49d3-attr-4-type"
+      transform="translate(5,101)" x="0"
+      y="0">Boolean
+    </text>
+    <text style="dominant-baseline: middle; font-size: 10.2px;"
+      class="er entityLabel"
+      id="text-entity-UserPermissions-11eadeed-34e2-57e9-b889-d11b5d4e49d3-attr-4-name"
+      transform="translate(59.095550537109375,101)"
+      x="0"
+      y="0">manageMemberships
+    </text>
+    <text style="dominant-baseline: middle; font-size: 10.2px;" class="er entityLabel"
+      id="text-entity-UserPermissions-11eadeed-34e2-57e9-b889-d11b5d4e49d3-attr-5-type"
+      transform="translate(5,123)" x="0"
+      y="0">Boolean
+    </text>
+    <text style="dominant-baseline: middle; font-size: 10.2px;"
+      class="er entityLabel"
+      id="text-entity-UserPermissions-11eadeed-34e2-57e9-b889-d11b5d4e49d3-attr-5-name"
+      transform="translate(59.095550537109375,123)"
+      x="0"
+      y="0">manageEvents
+    </text>
+    <text style="dominant-baseline: middle; font-size: 10.2px;" class="er entityLabel"
+      id="text-entity-UserPermissions-11eadeed-34e2-57e9-b889-d11b5d4e49d3-attr-6-type"
+      transform="translate(5,145)" x="0"
+      y="0">Boolean
+    </text>
+    <text style="dominant-baseline: middle; font-size: 10.2px;"
+      class="er entityLabel"
+      id="text-entity-UserPermissions-11eadeed-34e2-57e9-b889-d11b5d4e49d3-attr-6-name"
+      transform="translate(59.095550537109375,145)"
+      x="0"
+      y="0">manageClub
+    </text>
+  </g>
   <path style="stroke: gray; fill: none;" class="er relationshipLine"
-    d="M243.74943161010742,214.1805058617578L217.50527890523276,234.48375488479817C191.26112620035806,254.78700390783854,138.77282079060873,295.39350195391927,112.52866808573405,324.030084310293C86.28451538085938,352.6666666666667,86.28451538085938,369.3333333333333,86.28451538085938,377.6666666666667L86.28451538085938,386"
+    d="M329.9048957824707,197.84648429547087L289.30149904886883,220.87207024622572C248.69810231526694,243.8976561969806,167.49130884806314,289.9488280984903,126.88791211446126,324.9744140492451C86.28451538085938,360,86.28451538085938,384,86.28451538085938,396L86.28451538085938,408"
     marker-end="url(#ZERO_OR_MORE_END)"
     marker-start="url(#ZERO_OR_ONE_START)"/>
   <path style="stroke: gray; fill: none;" class="er relationshipLine"
-    d="M291.9183986642973,286L289.9814640663578,294.3333333333333C288.04452946841826,302.6666666666667,284.1706602725392,319.3333333333333,286.16454328466256,336C288.15842629678593,352.6666666666667,296.0200615169117,369.3333333333333,299.9508791269746,377.6666666666667L303.8816967370375,386"
+    d="M329.9048957824707,249.03454141318326L317.96918869018555,263.52878451098604C306.0334815979004,278.0230276087888,282.1620674133301,307.0115138043944,276.9769357442856,333.5057569021972C271.7918040752411,360,285.2929549217224,384,292.0435303449631,396L298.79410576820374,408"
     marker-end="url(#ZERO_OR_MORE_END)"
     marker-start="url(#ZERO_OR_MORE_START)"/>
   <path style="stroke: gray; fill: none;" class="er relationshipLine"
-    d="M356.7118854162828,386L360.6427030263457,377.6666666666667C364.5735206364086,369.3333333333333,372.4351558565343,352.6666666666667,373.74917400260597,336C375.0631921486776,319.3333333333333,369.82959322069513,302.6666666666667,367.21279375670383,294.3333333333333L364.5959942927126,286"
+    d="M481.6649346481907,286L486.21866871012145,294.3333333333333C490.7724027720522,302.6666666666667,499.8798708959138,319.3333333333333,509.55668750622453,336C519.2335041165352,352.6666666666667,529.479669213295,369.3333333333333,534.6027517616749,377.6666666666667L539.7258343100548,386"
+    marker-end="url(#ZERO_OR_MORE_END)"
+    marker-start="url(#ZERO_OR_MORE_START)"/>
+  <path style="stroke: gray; fill: none;" class="er relationshipLine"
+    d="M364.72390580177307,408L372.1011446714401,396C379.4783835411072,384,394.2328612804413,360,401.61010015010834,339.6666666666667C408.9873390197754,319.3333333333333,408.9873390197754,302.6666666666667,408.9873390197754,294.3333333333333L408.9873390197754,286"
     marker-end="url(#ONLY_ONE_END)"
     marker-start="url(#ZERO_OR_ONE_START)"/>
-  <rect class="er relationshipLabelBox" height="14" width="82.923828125" x="108.07098388671875"
-    y="282.17425537109375"/>
-  <rect class="er relationshipLabelBox" height="14" width="83.87890625" x="244.39651489257812"
-    y="330.3280029296875"/>
-  <rect class="er relationshipLabelBox" height="14" width="23.958984375" x="361.6850891113281"
-    y="329.97515869140625"/>
+  <path style="stroke: gray; fill: none;" class="er relationshipLine"
+    d="M618.1466369628906,386L621.401845296224,377.6666666666667C624.6570536295573,369.3333333333333,631.167470296224,352.6666666666667,609.4879945119222,324.3804002778656C587.8085187276205,296.0941338890645,537.9391504923502,256.18826777812893,513.0044663747152,236.23533472266115L488.0697822570801,216.28240166719337"
+    marker-end="url(#ONLY_ONE_END)"
+    marker-start="url(#ZERO_OR_ONE_START)"/>
+  <rect class="er relationshipLabelBox" height="14" width="82.923828125" x="143.3814697265625"
+    y="276.08392333984375"/>
+  <rect class="er relationshipLabelBox" height="14" width="83.87890625" x="237.85360717773438"
+    y="316.32855224609375"/>
+  <rect class="er relationshipLabelBox" height="14" width="62.41015625" x="478.639404296875"
+    y="329.493896484375"/>
+  <rect class="er relationshipLabelBox" height="14" width="23.958984375" x="385.23199462890625"
+    y="343.4316101074219"/>
+  <rect class="er relationshipLabelBox" height="14" width="23.958984375" x="564.2869873046875"
+    y="282.5607604980469"/>
   <style>#my-svg{font-family:"trebuchet
     ms",verdana,arial,sans-serif;font-size:16px;fill:#000000;}#my-svg
     .error-icon{fill:#552222;}#my-svg .error-text{fill:#552222;stroke:#552222;}#my-svg
@@ -465,14 +578,20 @@
     :root{--mermaid-font-family:"trebuchet ms",verdana,arial,sans-serif;}
   </style>
   <text style="text-anchor: middle; dominant-baseline: middle; font-size: 12px;"
-    class="er relationshipLabel" id="rel1" x="149.53289794921875" y="289.17425537109375">
+    class="er relationshipLabel" id="rel1" x="184.8433837890625" y="283.08392333984375">
     enum:pronouns
   </text>
   <text style="text-anchor: middle; dominant-baseline: middle; font-size: 12px;"
-    class="er relationshipLabel" id="rel2" x="286.3359680175781" y="337.3280029296875">
+    class="er relationshipLabel" id="rel2" x="279.7930603027344" y="323.32855224609375">
     authentications
   </text>
   <text style="text-anchor: middle; dominant-baseline: middle; font-size: 12px;"
-    class="er relationshipLabel" id="rel3" x="373.6645812988281" y="336.97515869140625">user
+    class="er relationshipLabel" id="rel3" x="509.844482421875" y="336.493896484375">permissions
+  </text>
+  <text style="text-anchor: middle; dominant-baseline: middle; font-size: 12px;"
+    class="er relationshipLabel" id="rel4" x="397.21148681640625" y="350.4316101074219">user
+  </text>
+  <text style="text-anchor: middle; dominant-baseline: middle; font-size: 12px;"
+    class="er relationshipLabel" id="rel5" x="576.2664794921875" y="289.5607604980469">user
   </text>
 </svg>

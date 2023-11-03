@@ -9,7 +9,7 @@ import {
 import type { loader as rootLoader } from "../root";
 import type { ActionFunctionArgs, LoaderFunctionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { commitSession, getSession } from "~/services/session.server";
+import * as AuthSession from "~/services/auth.session.server";
 import { getAuthorisationUrl } from "~/services/auth/auth.server";
 
 export async function loader({}: LoaderFunctionArgs) {
@@ -31,11 +31,13 @@ export async function action({ request }: ActionFunctionArgs) {
   ) {
     return redirect("/login");
   }
-  const session = await getSession(request.headers.get("Cookie"));
-  const authorisationUrl = await getAuthorisationUrl(providerName, session);
+  const authSession = await AuthSession.getSession(
+    request.headers.get("Cookie"),
+  );
+  const authorisationUrl = await getAuthorisationUrl(providerName, authSession);
   return redirect(authorisationUrl, {
     headers: {
-      "Set-Cookie": await commitSession(session),
+      "Set-Cookie": await AuthSession.commitSession(authSession),
     },
   });
 }
