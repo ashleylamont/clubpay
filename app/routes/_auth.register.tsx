@@ -56,7 +56,7 @@ export async function action({ request }: LoaderFunctionArgs) {
       lastName: oauthUserData.lastName,
       preferredName: oauthUserData.preferredName,
       email: oauthUserData.email,
-      pronouns: [oauthUserData.pronouns],
+      pronouns: oauthUserData.pronouns,
       otherPronouns: oauthUserData.otherPronouns,
       superuser: willBeSuperuser,
       authentications: {

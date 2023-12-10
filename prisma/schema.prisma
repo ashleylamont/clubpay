@@ -1,7 +1,6 @@
 datasource db {
   provider   = "postgresql"
   url        = env("DATABASE_URL")
-  extensions = [pgcrypto]
 }
 
 generator client {
@@ -50,7 +49,7 @@ model User {
   preferredName   String?
   firstName       String
   lastName        String
-  pronouns        Pronouns[]
+  pronouns        Pronouns?
   otherPronouns   String?
   avatarUrl       String?
   superuser       Boolean              @default(false)
