@@ -18,7 +18,7 @@ import {
 
 import tailwind from "~/tailwind.css";
 import remixicon from "remixicon/fonts/remixicon.css";
-import { currentUser } from "~/services/auth/auth.server";
+import { getCurrentUser } from "~/services/auth/auth.server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwind },
@@ -27,12 +27,13 @@ export const links: LinksFunction = () => [
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const user = await currentUser(request);
+  const user = await getCurrentUser(request);
   const hasManagePermissions = !!(
     user?.manageClub ||
     user?.manageMembers ||
     user?.manageEvents ||
-    user?.manageMemberships
+    user?.manageMemberships ||
+    user?.superuser
   );
   return json({ user, hasManagePermissions });
 }

@@ -9,23 +9,42 @@ export interface UserData
   extends Omit<User, "permissions" | "createdAt" | "updatedAt">,
     Omit<UserPermissions, "userId" | "createdAt" | "updatedAt"> {}
 
-export async function currentUser(request: Request): Promise<null | UserData> {
+export async function getCurrentUser(
+  request: Request,
+): Promise<null | UserData> {
   const session = await getSession(request.headers.get("Cookie"));
-  if (!session) {
-    return null;
-  }
-  return session.get("user") ?? null;
-}
-
-export async function fetchCurrentUser(request: Request): Promise<null | UserData> {
-  const user = await currentUser(request);
-  if (!user) {
-    return null;
-  }
-  return prisma.user.findUnique({
-    where: { id: user.id },
+  if (!session) return null;
+  const sessionUser = session.get("user");
+  if (!sessionUser) return null;
+  const user = await prisma.user.findUnique({
+    where: { id: sessionUser.id },
     include: { permissions: true },
   });
+  if (!user) return null;
+  return {
+    ...user,
+    manageMemberships: user.permissions?.manageMemberships ?? false,
+    manageClub: user.permissions?.manageClub ?? false,
+    manageEvents: user.permissions?.manageEvents ?? false,
+    manageMembers: user.permissions?.manageMembers ?? false,
+  };
+}
+
+export const PERMISSION = {
+  MANAGE_MEMBERSHIPS: "manageMemberships",
+  MANAGE_CLUB: "manageClub",
+  MANAGE_EVENTS: "manageEvents",
+  MANAGE_MEMBERS: "manageMembers",
+} as const;
+export type PERMISSION = (typeof PERMISSION)[keyof typeof PERMISSION];
+
+export async function checkPermission(
+  request: Request,
+  permission: PERMISSION,
+) {
+  const user = await getCurrentUser(request);
+  if (!user) return false;
+  return user[permission] || user.superuser;
 }
 
 export async function getAuthorisationUrl(

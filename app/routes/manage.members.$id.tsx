@@ -6,8 +6,11 @@ import SelectComponent from "~/components/forms/selectComponent";
 import { Form } from "~/components/forms/form";
 import { z } from "zod";
 import { RiAlertLine } from "@remixicon/react";
+import { checkPermission, PERMISSION } from "~/services/auth/auth.server";
+import { formAction } from "~/services/form-action.server";
+import { makeDomainFunction } from "domain-functions";
 
-const UserModel = z.object({
+const schema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
   preferredName: z.string().nullable(),
@@ -27,10 +30,7 @@ const UserModel = z.object({
   manageClub: z.boolean(),
 });
 
-export async function loader({ params, context, request }: LoaderFunctionArgs) {
-  // Check if current user has permission to manage members
-  // If not, redirect to home
-  const 
+export async function loader({ params }: LoaderFunctionArgs) {
   const user = await prisma.user.findUnique({
     where: {
       id: params.id,
@@ -42,17 +42,32 @@ export async function loader({ params, context, request }: LoaderFunctionArgs) {
   return json({ user });
 }
 
-export async function action({ request, params }: LoaderFunctionArgs) {
-  const data = await request.formData();
+const environmentSchema = z.object({ id: z.string() });
+
+const mutation = makeDomainFunction(
+  schema,
+  environmentSchema,
+)(async (data, environment) => {
   const existingUser = await prisma.user.findUnique({
     where: {
-      id: params.id,
+      id: environment.id,
     },
   });
-  const userData = UserModel.parse(Object.fromEntries(data.entries()));
+  if (!existingUser) {
+    throw "User not found";
+  }
+  const userData = schema.parse(data);
+  const permissionsData = {
+    manageMembers: Boolean(userData.manageMembers && !existingUser.superuser),
+    manageEvents: Boolean(userData.manageEvents && !existingUser.superuser),
+    manageMemberships: Boolean(
+      userData.manageMemberships && !existingUser.superuser,
+    ),
+    manageClub: Boolean(userData.manageClub && !existingUser.superuser),
+  };
   const user = await prisma.user.update({
     where: {
-      id: params.id,
+      id: environment.id,
     },
     data: {
       firstName: userData.firstName,
@@ -62,16 +77,31 @@ export async function action({ request, params }: LoaderFunctionArgs) {
       pronouns: userData.pronouns,
       otherPronouns: userData.otherPronouns,
       permissions: {
-        update: {
-          manageMembers: userData.manageMembers && !existingUser.superuser,
-          manageEvents: userData.manageEvents,
-          manageMemberships: userData.manageMemberships,
-          manageClub: userData.manageClub,
+        upsert: {
+          update: permissionsData,
+          where: {
+            userId: environment.id,
+          },
+          create: permissionsData,
         },
       },
     },
   });
   return json({ user });
+});
+
+export async function action({ request, params }: LoaderFunctionArgs) {
+  const hasPermission = checkPermission(request, PERMISSION.MANAGE_MEMBERS);
+  if (!hasPermission) {
+    return json({ error: "You do not have permission to do that" }, 403);
+  }
+  return formAction({
+    request,
+    schema: schema,
+    mutation,
+    successPath: `/manage/members/${params.id}`,
+    environment: { id: params.id },
+  });
 }
 
 export default function ManageMember() {
@@ -84,7 +114,7 @@ export default function ManageMember() {
 
   return (
     <Form
-      schema={UserModel}
+      schema={schema}
       values={{
         firstName: targetUser.firstName,
         lastName: targetUser.lastName,
@@ -119,7 +149,7 @@ export default function ManageMember() {
           <Field name="preferredName" label="Preferred Name" />
           <Field name="email" label="Email" />
           <Field name="pronouns" label="Pronouns">
-            {({ Label, Errors }) => (
+            {({ Label, Errors: FieldErrors }) => (
               <>
                 <Label />
                 <SelectComponent {...register("pronouns")}>
@@ -128,6 +158,7 @@ export default function ManageMember() {
                   <option value="THEY_THEM">They/Them</option>
                   <option value="OTHER">Other</option>
                 </SelectComponent>
+                <FieldErrors />
               </>
             )}
           </Field>
