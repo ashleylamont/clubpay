@@ -1,3 +1,3 @@
-export * from "./user";
-export * from "./userauthentication";
-export * from "./userpermissions";
+export * from "./user"
+export * from "./userauthentication"
+export * from "./userpermissions"

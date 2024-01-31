@@ -1,13 +1,6 @@
-import * as z from "zod";
-import { Pronouns } from "@prisma/client";
-import type {
-  CompleteUserAuthentication,
-  CompleteUserPermissions,
-} from "./index";
-import {
-  RelatedUserAuthenticationModel,
-  RelatedUserPermissionsModel,
-} from "./index";
+import * as z from "zod"
+import { Pronouns } from "@prisma/client"
+import { CompleteUserAuthentication, RelatedUserAuthenticationModel, CompleteUserPermissions, RelatedUserPermissionsModel } from "./index"
 
 export const UserModel = z.object({
   id: z.string(),
@@ -17,15 +10,15 @@ export const UserModel = z.object({
   preferredName: z.string().nullish(),
   firstName: z.string(),
   lastName: z.string(),
-  pronouns: z.nativeEnum(Pronouns).array(),
+  pronouns: z.nativeEnum(Pronouns).nullish(),
   otherPronouns: z.string().nullish(),
   avatarUrl: z.string().nullish(),
   superuser: z.boolean(),
-});
+})
 
 export interface CompleteUser extends z.infer<typeof UserModel> {
-  authentications: CompleteUserAuthentication[];
-  permissions?: CompleteUserPermissions | null;
+  authentications: CompleteUserAuthentication[]
+  permissions?: CompleteUserPermissions | null
 }
 
 /**
@@ -33,9 +26,7 @@ export interface CompleteUser extends z.infer<typeof UserModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedUserModel: z.ZodSchema<CompleteUser> = z.lazy(() =>
-  UserModel.extend({
-    authentications: RelatedUserAuthenticationModel.array(),
-    permissions: RelatedUserPermissionsModel.nullish(),
-  }),
-);
+export const RelatedUserModel: z.ZodSchema<CompleteUser> = z.lazy(() => UserModel.extend({
+  authentications: RelatedUserAuthenticationModel.array(),
+  permissions: RelatedUserPermissionsModel.nullish(),
+}))

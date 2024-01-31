@@ -1,6 +1,5 @@
-import * as z from "zod";
-import type { CompleteUser } from "./index";
-import { RelatedUserModel } from "./index";
+import * as z from "zod"
+import { CompleteUser, RelatedUserModel } from "./index"
 
 export const UserPermissionsModel = z.object({
   createdAt: z.date(),
@@ -10,11 +9,10 @@ export const UserPermissionsModel = z.object({
   manageMemberships: z.boolean(),
   manageEvents: z.boolean(),
   manageClub: z.boolean(),
-});
+})
 
-export interface CompleteUserPermissions
-  extends z.infer<typeof UserPermissionsModel> {
-  user: CompleteUser;
+export interface CompleteUserPermissions extends z.infer<typeof UserPermissionsModel> {
+  user: CompleteUser
 }
 
 /**
@@ -22,9 +20,6 @@ export interface CompleteUserPermissions
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedUserPermissionsModel: z.ZodSchema<CompleteUserPermissions> =
-  z.lazy(() =>
-    UserPermissionsModel.extend({
-      user: RelatedUserModel,
-    }),
-  );
+export const RelatedUserPermissionsModel: z.ZodSchema<CompleteUserPermissions> = z.lazy(() => UserPermissionsModel.extend({
+  user: RelatedUserModel,
+}))

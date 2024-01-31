@@ -1,3 +1,6 @@
+import type { User } from ".prisma/client";
+import type { UserData } from "~/services/auth/auth.server";
+
 const DEFAULT_REDIRECT = "/";
 
 export function assertExists<T>(
@@ -31,4 +34,27 @@ export function safeRedirect(
   }
 
   return to;
+}
+
+export function displayPronouns(
+  user: Pick<User, "otherPronouns" | "pronouns"> | null,
+): string {
+  if (!user) {
+    return "No pronouns set";
+  }
+  const pronouns = user.pronouns;
+  if (pronouns === null && user.otherPronouns === null) {
+    return "No pronouns set";
+  }
+
+  switch (pronouns) {
+    case "HE_HIM":
+      return "He/Him";
+    case "SHE_HER":
+      return "She/Her";
+    case "THEY_THEM":
+      return "They/Them";
+    default:
+      return user.otherPronouns ?? "Other";
+  }
 }

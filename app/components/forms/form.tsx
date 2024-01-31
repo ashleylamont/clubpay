@@ -13,6 +13,7 @@ import MultilineComponent from "~/components/forms/multilineComponent";
 import SelectComponent from "~/components/forms/selectComponent";
 import CheckboxComponent from "~/components/forms/checkboxComponent";
 import ButtonComponent from "~/components/forms/buttonComponent";
+import CheckboxWrapperComponent from "~/components/forms/checkboxWrapperComponent";
 
 const RemixForm = createForm({
   component: FrameworkForm,
@@ -31,6 +32,7 @@ function Form<Schema extends FormSchema>(props: FormProps<Schema>) {
       multilineComponent={MultilineComponent}
       selectComponent={SelectComponent}
       checkboxComponent={CheckboxComponent}
+      checkboxWrapperComponent={CheckboxWrapperComponent}
       buttonComponent={ButtonComponent}
       {...props}
     />
