@@ -1,6 +1,6 @@
 datasource db {
-  provider   = "postgresql"
-  url        = env("DATABASE_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -85,4 +85,32 @@ model UserPermissions {
   manageMemberships Boolean @default(false)
   manageEvents      Boolean @default(false)
   manageClub        Boolean @default(false)
+}
+
+// In theory, we can make this multi-club in future, but for now, let's keep it as single-club because the permissions model is built around that
+model Club {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  id          String  @id @default(cuid())
+  // An arbitrary value to make it harder to accidentally make multiple clubs
+  fixedValue  String  @unique @default("fixed")
+  name        String  @unique
+  description String?
+  logoUrl     String?
+  bannerUrl   String?
+  clubLinks   ClubLink[]
+
+}
+
+model ClubLink {
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  id        String @id @default(cuid())
+  clubId    String
+  club      Club   @relation(fields: [clubId], references: [id])
+  name      String
+  url       String
+  sortOrder Int
 }
