@@ -1,13 +1,36 @@
 import type { LoaderFunctionArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { prisma } from "~/services/db.server";
-import { useLoaderData, useRouteLoaderData } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
 import SelectComponent from "~/components/forms/selectComponent";
 import { Form } from "~/components/forms/form";
 import { z } from "zod";
-import type { loader as rootLoader } from "../root";
+import { RiAlertLine } from "@remixicon/react";
 
-export async function loader({ params }: LoaderFunctionArgs) {
+const UserModel = z.object({
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
+  preferredName: z.string().nullable(),
+  email: z.string().email(),
+  pronouns: z
+    .union([
+      z.literal("HE_HIM"),
+      z.literal("SHE_HER"),
+      z.literal("THEY_THEM"),
+      z.literal("OTHER"),
+    ])
+    .nullable(),
+  otherPronouns: z.string().nullable(),
+  manageMembers: z.boolean(),
+  manageEvents: z.boolean(),
+  manageMemberships: z.boolean(),
+  manageClub: z.boolean(),
+});
+
+export async function loader({ params, context, request }: LoaderFunctionArgs) {
+  // Check if current user has permission to manage members
+  // If not, redirect to home
+  const 
   const user = await prisma.user.findUnique({
     where: {
       id: params.id,
@@ -19,55 +42,70 @@ export async function loader({ params }: LoaderFunctionArgs) {
   return json({ user });
 }
 
+export async function action({ request, params }: LoaderFunctionArgs) {
+  const data = await request.formData();
+  const existingUser = await prisma.user.findUnique({
+    where: {
+      id: params.id,
+    },
+  });
+  const userData = UserModel.parse(Object.fromEntries(data.entries()));
+  const user = await prisma.user.update({
+    where: {
+      id: params.id,
+    },
+    data: {
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      preferredName: userData.preferredName,
+      email: userData.email,
+      pronouns: userData.pronouns,
+      otherPronouns: userData.otherPronouns,
+      permissions: {
+        update: {
+          manageMembers: userData.manageMembers && !existingUser.superuser,
+          manageEvents: userData.manageEvents,
+          manageMemberships: userData.manageMemberships,
+          manageClub: userData.manageClub,
+        },
+      },
+    },
+  });
+  return json({ user });
+}
+
 export default function ManageMember() {
   const loaderData = useLoaderData<typeof loader>();
   const targetUser = loaderData?.user;
-  const rootData = useRouteLoaderData<typeof rootLoader>("root");
 
   if (!targetUser) {
     return <div>User not found</div>;
   }
 
-  let UserModel = z.object({
-    firstName: z.string().min(1).default(targetUser.firstName),
-    lastName: z.string().min(1).default(targetUser.lastName),
-    preferredName: z.string().nullable().default(targetUser.preferredName),
-    email: z.string().email().default(targetUser.email),
-    pronouns: z
-      .union([
-        z.literal("HE_HIM"),
-        z.literal("SHE_HER"),
-        z.literal("THEY_THEM"),
-        z.literal("OTHER"),
-      ])
-      .nullable()
-      .default(targetUser.pronouns),
-    otherPronouns: z.string().nullable().default(targetUser.otherPronouns),
-    manageMembers: z
-      .boolean()
-      .default(targetUser.permissions?.manageMembers || false),
-    manageEvents: z
-      .boolean()
-      .default(targetUser.permissions?.manageEvents || false),
-    manageMemberships: z
-      .boolean()
-      .default(targetUser.permissions?.manageMemberships || false),
-    manageClub: z
-      .boolean()
-      .default(targetUser.permissions?.manageClub || false),
-  });
-
-  if (!rootData?.user?.superuser) {
-    UserModel = UserModel.extend({
-      manageMemberships: UserModel.shape.manageMemberships.readonly(),
-      manageClub: UserModel.shape.manageClub.readonly(),
-      manageEvents: UserModel.shape.manageEvents.readonly(),
-      manageMembers: UserModel.shape.manageMembers.readonly(),
-    }) as unknown as typeof UserModel; // Type hack to make TS happy, it's a very minor type conflict and not really worth fixing, it should have no net effect on runtime type safety.
-  }
-
   return (
-    <Form schema={UserModel}>
+    <Form
+      schema={UserModel}
+      values={{
+        firstName: targetUser.firstName,
+        lastName: targetUser.lastName,
+        preferredName: targetUser.preferredName,
+        email: targetUser.email,
+        pronouns: targetUser.pronouns,
+        otherPronouns: targetUser.otherPronouns,
+        manageMembers:
+          targetUser.permissions?.manageMembers ||
+          targetUser.superuser ||
+          false,
+        manageEvents:
+          targetUser.permissions?.manageEvents || targetUser.superuser || false,
+        manageMemberships:
+          targetUser.permissions?.manageMemberships ||
+          targetUser.superuser ||
+          false,
+        manageClub:
+          targetUser.permissions?.manageClub || targetUser.superuser || false,
+      }}
+    >
       {({ Field, Errors, Button, register }) => (
         <div className="flex flex-col gap-2">
           <h2 className="text-2xl font-bold">
@@ -95,10 +133,19 @@ export default function ManageMember() {
           </Field>
           <Field name="otherPronouns" label="Other Pronouns" />
           <h3 className="text-xl font-bold">Permissions</h3>
-          <Field name="manageMembers" label="Manage Members" />
-          <Field name="manageEvents" label="Manage Events" />
-          <Field name="manageMemberships" label="Manage Memberships" />
-          <Field name="manageClub" label="Manage Club" />
+          {targetUser.superuser ? (
+            <div className="alert alert-warning">
+              <RiAlertLine size={24} />
+              This user is a superuser and has all permissions.
+            </div>
+          ) : (
+            <>
+              <Field name="manageMembers" label="Manage Members" />
+              <Field name="manageEvents" label="Manage Events" />
+              <Field name="manageMemberships" label="Manage Memberships" />
+              <Field name="manageClub" label="Manage Club" />
+            </>
+          )}
           <Errors />
           <Button>Save Changes</Button>
         </div>
