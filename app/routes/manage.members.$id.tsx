@@ -99,7 +99,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
     request,
     schema: schema,
     mutation,
-    successPath: `/manage/members/${params.id}`,
+    successPath: `/manage/members/`,
     environment: { id: params.id },
   });
 }

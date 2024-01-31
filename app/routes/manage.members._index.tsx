@@ -66,22 +66,26 @@ export default function ManageMembersIndex() {
                     <i className="ri-shield-fill"></i>
                   </div>
                 )}
-                {(user.permissions?.manageMembers ?? user.superuser) && (
+                {((user.permissions?.manageMembers || user.superuser) ??
+                  user.superuser) && (
                   <div className="tooltip" data-tip="Can Manage Members">
                     <i className="ri-user-fill"></i>
                   </div>
                 )}
-                {(user.permissions?.manageEvents ?? user.superuser) && (
+                {((user.permissions?.manageEvents || user.superuser) ??
+                  user.superuser) && (
                   <div className="tooltip" data-tip="Can Manage Events">
                     <i className="ri-calendar-2-fill"></i>
                   </div>
                 )}
-                {(user.permissions?.manageMemberships ?? user.superuser) && (
+                {((user.permissions?.manageMemberships || user.superuser) ??
+                  user.superuser) && (
                   <div className="tooltip" data-tip="Can Manage Memberships">
                     <i className="ri-coin-fill"></i>
                   </div>
                 )}
-                {(user.permissions?.manageClub ?? user.superuser) && (
+                {((user.permissions?.manageClub || user.superuser) ??
+                  user.superuser) && (
                   <div className="tooltip" data-tip="Can Manage Club">
                     <i className="ri-building-2-fill"></i>
                   </div>
