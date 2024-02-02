@@ -97,7 +97,7 @@ export async function action({ request, params }: LoaderFunctionArgs) {
   }
   return formAction({
     request,
-    schema: schema,
+    schema,
     mutation,
     successPath: `/manage/members/`,
     environment: { id: params.id },

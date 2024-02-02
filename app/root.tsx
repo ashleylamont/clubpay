@@ -3,6 +3,7 @@ import {
   json,
   type LinksFunction,
   type LoaderFunctionArgs,
+  redirect,
 } from "@remix-run/node";
 import {
   Link,
@@ -19,6 +20,7 @@ import {
 import tailwind from "~/tailwind.css";
 import remixicon from "remixicon/fonts/remixicon.css";
 import { getCurrentUser } from "~/services/auth/auth.server";
+import { prisma } from "~/services/db.server";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: tailwind },
@@ -27,15 +29,32 @@ export const links: LinksFunction = () => [
 ];
 
 export async function loader({ request }: LoaderFunctionArgs) {
-  const user = await getCurrentUser(request);
-  const hasManagePermissions = !!(
-    user?.manageClub ||
-    user?.manageMembers ||
-    user?.manageEvents ||
-    user?.manageMemberships ||
-    user?.superuser
+  const clubPromise = prisma.club.findMany().then((clubs) => clubs[0]);
+  const userPromise = getCurrentUser(request);
+  const hasManagePermissionsPromise = userPromise.then(
+    (user) =>
+      !!(
+        user?.manageClub ||
+        user?.manageMembers ||
+        user?.manageEvents ||
+        user?.manageMemberships ||
+        user?.superuser
+      ),
   );
-  return json({ user, hasManagePermissions });
+  const [club, user, hasManagePermissions] = await Promise.all([
+    clubPromise,
+    userPromise,
+    hasManagePermissionsPromise,
+  ]);
+  if (
+    !club &&
+    user &&
+    (user?.manageClub || user?.superuser) &&
+    !request.url.endsWith("/manage/club/create")
+  ) {
+    return redirect("/manage/club/create");
+  }
+  return json({ club, user, hasManagePermissions });
 }
 
 export default function App() {
