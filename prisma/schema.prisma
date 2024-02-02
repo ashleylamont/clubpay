@@ -92,9 +92,7 @@ model Club {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  id          String  @id @default(cuid())
-  // An arbitrary value to make it harder to accidentally make multiple clubs
-  fixedValue  String  @unique @default("fixed")
+  id          String  @id @unique @default("club") // single-club for now
   name        String  @unique
   description String?
   logoUrl     String?

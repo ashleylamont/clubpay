@@ -5,7 +5,6 @@ export const ClubModel = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   id: z.string(),
-  fixedValue: z.string(),
   name: z.string(),
   description: z.string().nullish(),
   logoUrl: z.string().nullish(),
